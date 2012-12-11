@@ -292,25 +292,46 @@ void GameStatePlay::CheckInput(float dt)
 		mPlayer->Move(0.1f, -M_PI_2);
 	}**/
 	
-	if (aX >= 20 || aX <= -20 || aY >= 20 || aY <= -20) {
+	if (aX >= 11 || aX <= -11 || aY >= 11 || aY <= -11) {
 		float angle = atan2f(aX,-aY);
 		float speed = (sqrtf(aX*aX + aY*aY)/127.5f)*0.1f;
 		if (speed > 0.1f) {
 			speed = 0.1f;
+			mPlayer->Move(speed, angle);
 		}
-		mPlayer->Move(speed, angle);
 	}
 	else {
 		mPlayer->SetMoveState(NOTMOVING);
 	}
+	
+	//P: ACCELERATION, LEAJIAN//////////////
+	if (aX >= 120 || aX <= -120 || aY >= 120 || aY <= -120) {
+		float angle = atan2f(aX,-aY);
+		float speed = (sqrtf(aX*aX + aY*aY)/127.5f)*0.1f;
+		if (speed > 0.1f) {
+			speed += dt*0.0001f; //increase
+			}
+		if (speed == 0.2f) {// peak
+			speed -= dt*0.0001f; //decrease
+			}
+		if (speed == 0.1f){ // bottom (u0)
+			speed += dt*0.0f; //neutral
+			}
+			mPlayer->Move(speed, angle);
+	}					
+	else {
+		mPlayer->SetMoveState(NOTMOVING);
+	}
+	/////////////////////////////////////////
+	
 
 	if (mEngine->GetButtonState(PSP_CTRL_LTRIGGER))
 	{
-		mPlayer->RotateFacing(-0.005f*dt);
+		mPlayer->RotateFacing(-0.006f*dt); //P: ROTATION SPEED
 	}
 	if (mEngine->GetButtonState(PSP_CTRL_RTRIGGER))
 	{
-		mPlayer->RotateFacing(0.005f*dt);
+		mPlayer->RotateFacing(0.006f*dt); //P: ROTATION SPEED
 	}
 
 	/*if (mPlayer->mGunIndex == PRIMARY || mPlayer->mGunIndex == KNIFE) {
@@ -336,7 +357,7 @@ void GameStatePlay::CheckInput(float dt)
 	if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE))
 	{
 		mPlayer->SwitchNext();
-		mSwitchTimer = 1500;
+		mSwitchTimer = 1500; //P: WEAPON SWITCH SPEED
 	}
 	if (mEngine->GetButtonClick(PSP_CTRL_TRIANGLE))
 	{
@@ -1022,7 +1043,7 @@ void GameStatePlay::ResetRound() {
 			if (mPeople[i]->mTeam == mWinner) {
 				mPeople[i]->mMoney += 3250;
 				if (mPeople[i]->mMoney > 16000) {
-					mPeople[i]->mMoney = 16000;
+					mPeople[i]->mMoney = 16000;//P: MILLIONARE MODE CAN BE APPLIED HERE?
 				}
 			}
 			else {
@@ -1074,17 +1095,17 @@ void GameStatePlay::Explode(Grenade* grenade) {
 				if (!visible) continue;*/
 
 				if (!mGrid->LineOfSight(grenade->mX,grenade->mY,mPeople[i]->mX,mPeople[i]->mY)) continue;
-
+				//////////////////P: LINE OF SIGHT! :DDDDDDDD/////////////////
 				int a = 500;
 				if (mPeople[i]->mGunIndex == PRIMARY) {
 					if (mPeople[i]->GetCurrentGun()->mGun->mId == 19 || mPeople[i]->GetCurrentGun()->mGun->mId == 20) {
-						a = 800;
+						a = 1250;
 					}
 					else if (mPeople[i]->GetCurrentGun()->mGun->mId == 21 || mPeople[i]->GetCurrentGun()->mGun->mId == 22 || mPeople[i]->GetCurrentGun()->mGun->mId == 23) {
-						a = 1400;
+						a = 1800;
 					}
 					else if (mPeople[i]->GetCurrentGun()->mGun->mId == 16) {
-						a = 1100;
+						a = 1500;
 					}
 				}
 				float cameraX = mPeople[i]->mX + (cosf(mPeople[i]->mFacingAngle))*a/16.6f;//dt
