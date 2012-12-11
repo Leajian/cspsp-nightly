@@ -3,8 +3,11 @@ cspsp-nightly
 
 ----------------------------------------------------------------
 Original website : http://cspsp.appspot.com/
+=============
 Original forums  : http://s4.zetaboards.com/CSPSP/index/
+=============
 Original guide   : http://s4.zetaboards.com/CSPSP/topic/9771063/1/
+=============
 Original source  : https://github.com/kevinbchen/cspsp
 =============
 Fixed source     : https://github.com/Leajian/cspsp
