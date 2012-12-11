@@ -1,3 +1,3 @@
 make clean 
-make 3xx
+make 3xx 
 pause
