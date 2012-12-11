@@ -25,7 +25,7 @@ LIBS=-L../../JGE/lib/psp -lhgetools -ljge300 -lfreetype -ljpeg -lgif -lpng -lz -
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = CSPSP
 PSP_EBOOT_ICON = icon.png
-
+PSP_EBOOT_PIC1=pic1.png
 
 PSPSDK=C:/pspsdk/psp/sdk
 include $(PSPSDK)/lib/build.mak
