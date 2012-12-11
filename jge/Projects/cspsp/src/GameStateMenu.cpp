@@ -97,13 +97,19 @@ void GameStateMenu::Update(float dt)
 		}
 		else
 		{
-			mCreditsYPos -= 0.03f*dt;
+			mCreditsYPos -= 0.02f*dt;
 			if (mEngine->GetButtonState(PSP_CTRL_CROSS)) {
 				mCreditsYPos -= 0.08f*dt;
 			}
 			if (mEngine->GetButtonClick(PSP_CTRL_CIRCLE)) {
 				mStage = STAGE_MENU;
 			}
+			if (mEngine->GetButtonState(PSP_CTRL_TRIANGLE)) {
+				mCreditsYPos += 0.02f*dt;
+			}
+			if (mEngine->GetButtonState(PSP_CTRL_SQUARE)) {
+				mCreditsYPos += 0.16f*dt;
+			}	
 		}
 	}
 }
