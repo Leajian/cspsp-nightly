@@ -24,6 +24,9 @@ Person::Person(JQuad* quads[], JQuad* deadquad, std::vector<Bullet*>* bullets, s
 	//mState = 0;
 	mStateTime = 0.0f;
 	mHealth = 100;
+	mRegen = 0.0f;
+	mRegenTimer = 2.0f; //default 1 sec
+	mRegenPoints = 5; //default 1 HP
 	mMoney = 800;
 	mRecoilAngle = 0.0f;
 	SetTotalRotation(M_PI_2);
@@ -227,22 +230,6 @@ void Person::PreUpdate(float dt)
 //------------------------------------------------------------------------------------------------
 void Person::Update(float dt)
 {
-
-//P: HEALTH REGEN
-	
-	if (mHealth >=0 || mHealth <= 100) {
-		mHealth += (dt*1000)*1;
-		if (mHealth >= 100) {
-		mHealth = 100;
-		mHealth += 0;
-		}
-		else if (mHealth <= 0){
-		mHealth = 0;
-		mHealth += 0;
-	}
-}
-	/////////////////////
-
 	if (mGuns[mGunIndex] == NULL) {
 		printf("isPlayerOnline: %i\n",mIsPlayerOnline);
 		printf("invalid gunindex: %i\n",mGunIndex);
@@ -250,7 +237,7 @@ void Person::Update(float dt)
 	}
 	mStateTime += dt;
 	if (mState == DEAD) {
-		if (mStateTime >= 15000.0f) {  //P: time for deadbody = 4 secs //orig : 2 sec
+		if (mStateTime >= 15000.0f) {  //P: time for deadbody = 15 secs //orig : 2 sec
 			mFadeTime -= dt;
 			if (mFadeTime < 0.0f) {
 				mFadeTime = 0.0f;
@@ -258,7 +245,21 @@ void Person::Update(float dt)
 		}
 		return;
 	}
-
+	
+	//P: HEALTH REGEN (adds as HP the mRegenPoints per desired mRegenTimer)
+	if (mMoveState == NOTMOVING) {
+		mRegen += dt/1000.0f; 
+		if (mRegen >= mRegenTimer) {  // + mRegenPoints HP per mRegenTimer second(s)
+			if (mHealth != 0) {
+						mHealth += mRegenPoints;
+						mRegen = 0.0f;
+			}
+		}
+		if (mHealth > 100) { //for safety and bug avoidance reasons, cause it could be done otherwise, but this is optimum.
+		mHealth = 100;
+		}
+	}
+	
 	mWalkAngle = mAngle;
 
 	if (mIsActive) {
@@ -399,6 +400,7 @@ void Person::Update(float dt)
 		}
 	}
 
+	//P: Same thing as regen just add a timer
 	mMuzzleFlashTime -= dt;
 	if (mMuzzleFlashTime < 0.0f) {
 		mMuzzleFlashTime = 0.0f;

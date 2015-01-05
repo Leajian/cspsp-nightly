@@ -113,6 +113,11 @@ public:
 	float mFadeTime;
 	float mStepTime;
 	int mHealth;
+	
+	float mRegen;
+	float mRegenTimer;
+	int mRegenPoints;
+	
 	int mMoney;
 	float mFacingAngle;
 	float mRecoilAngle;
