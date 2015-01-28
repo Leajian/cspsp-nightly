@@ -114,9 +114,13 @@ public:
 	float mStepTime;
 	int mHealth;
 	
-	float mRegen;
-	float mRegenTimer;
-	int mRegenPoints;
+	float mRegen;		//
+	float mRegenTimer;	// Health regeneration
+	int mRegenPoints;	//
+	
+	float mBleeding;	//
+	float mBleedTimer;  // Bleeding
+	int mBleedPoints;   //
 	
 	int mMoney;
 	float mFacingAngle;

@@ -24,9 +24,15 @@ Person::Person(JQuad* quads[], JQuad* deadquad, std::vector<Bullet*>* bullets, s
 	//mState = 0;
 	mStateTime = 0.0f;
 	mHealth = 100;
+	
 	mRegen = 0.0f;
-	mRegenTimer = 2.0f; //default 1 sec
-	mRegenPoints = 5; //default 1 HP
+	mRegenTimer = 2.0f; //default 2 sec
+	mRegenPoints = 0;	//default 1 HP, 0 HP to disable regeneration
+
+	mBleeding = 0.0f;
+	mBleedTimer = 3.0f; //default 3 sec
+	mBleedPoints = 10;   //default 10 HP, 0 HP to disable regeneration
+	
 	mMoney = 800;
 	mRecoilAngle = 0.0f;
 	SetTotalRotation(M_PI_2);
@@ -251,12 +257,29 @@ void Person::Update(float dt)
 		mRegen += dt/1000.0f; 
 		if (mRegen >= mRegenTimer) {  // + mRegenPoints HP per mRegenTimer second(s)
 			if (mHealth != 0) {
-						mHealth += mRegenPoints;
-						mRegen = 0.0f;
+					mHealth += mRegenPoints;
+					mRegen = 0.0f;
 			}
 		}
 		if (mHealth > 100) { //for safety and bug avoidance reasons, cause it could be done otherwise, but this is optimum.
-		mHealth = 100;
+			mHealth = 100;
+		}
+	}
+	
+	//P: Bleeding (removes as HP the mBleedPoints per desired mBleedTimer)
+	// BUGS: Score won't update and round may not end. Also no blood decal is spawns on every update and speed not decreases 
+	if (mHealth < 100) {
+		mBleeding += dt/1000.0f; 
+		if (mBleeding >= mBleedTimer) {  // - mBleedPoints HP per mBleedTimer second(s)
+			if (mHealth != 0) {
+					//mHealth -= mBleedPoints;
+					Person::TakeDamage(mBleedPoints);
+					mBleeding = 0.0f;
+			}
+		}
+		if (mHealth <= 0) {
+			mHealth = 0; // idk if this is necessary
+			Die();
 		}
 	}
 	
