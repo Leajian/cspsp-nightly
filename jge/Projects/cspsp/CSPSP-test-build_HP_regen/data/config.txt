@@ -1,6 +1,0 @@
-movement = absolute
-music = off
-ff = on
-menu = analog
-name = default
-map = gunstest
